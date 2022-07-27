@@ -17,8 +17,8 @@ inputs = {
 # terragrunt.hcl since it does not define any infrastructure by itself.
 skip = true
 
-terraform_version_constraint  = "= 1.2.5"
-terragrunt_version_constraint = ">= 0.38"
+# terraform_version_constraint  = "= 1.2.5"
+# terragrunt_version_constraint = ">= 0.38"
 
 # Terragrunt will generate the file "provider.tf" with the aws provider block
 # before calling to terraform. Note that this will overwrite the `provider.tf`
