@@ -1,6 +1,7 @@
 cwd := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 env_file := $(cwd)/.env
 tf_approve_opts = --auto-approve
+tg_approve_opts = --terragrunt-non-interactive
 TF_VAR_aws_access_key = ${AWS_ACCESS_KEY_ID}
 TF_VAR_aws_secret_key = ${AWS_SECRET_ACCESS_KEY}
 
@@ -27,7 +28,7 @@ version:
 	terragrunt --version
 
 config:
-	@echo export KUBECONFIG=$(KUBECONFIG)
+	@echo export KUBECONFIG=${KUBECONFIG}
 	@echo export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 	@echo export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
@@ -38,7 +39,7 @@ plan-all:
 	terragrunt run-all plan
 
 apply-all:
-	terragrunt run-all apply
+	terragrunt run-all apply ${tg_approve_opts}
 
 ec2:
 	aws ec2 describe-instances
