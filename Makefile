@@ -33,13 +33,24 @@ config:
 	@echo export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
 init-all:
-	terragrunt run-all init
+	terragrunt run-all init -reconfigure
 
 plan-all:
 	terragrunt run-all plan
 
 apply-all:
 	terragrunt run-all apply ${tg_approve_opts}
+
+reset-all:
+	find . -name '.terraform.lock.hcl' | xargs rm
+
+compile-providers:
+	m1-terraform-provider-helper activate
+
+	cd clusters/dev/kubernetes &&\
+		m1-terraform-provider-helper install hashicorp/template -v v2.2.0 &&\
+		m1-terraform-provider-helper install hashicorp/kubernetes -v v1.11.1 &&\
+		m1-terraform-provider-helper install hashicorp/helm -v v1.1.1
 
 ec2:
 	aws ec2 describe-instances
