@@ -10,11 +10,12 @@ ifneq ("$(wildcard $(env_file))","")
 	export
 endif
 
-wrap_targets := terraform tf kubectl
+wrap_targets := terraform terragrunt tf kubectl
 ifneq ($(filter $(firstword $(MAKECMDGOALS)), $(wrap_targets)), )
   RUN_ARGS := $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
   $(eval $(RUN_ARGS):;@:)
 endif
+
 
 all: version init-all apply-all
 	@echo Done!
@@ -40,6 +41,15 @@ plan-all:
 
 apply-all:
 	terragrunt run-all apply ${tg_approve_opts}
+
+destroy-all:
+	terragrunt run-all destroy
+
+terragrunt:
+	terragrunt $(RUN_ARGS)
+
+reset-all:
+	find . -name '.terraform.lock.hcl' | xargs rm
 
 ec2:
 	aws ec2 describe-instances
