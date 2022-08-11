@@ -1,9 +1,6 @@
-cwd := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-env_file := $(cwd)/.env
+env_file := .env
 tf_approve_opts = --auto-approve
 tg_approve_opts = --terragrunt-non-interactive
-TF_VAR_aws_access_key = ${AWS_ACCESS_KEY_ID}
-TF_VAR_aws_secret_key = ${AWS_SECRET_ACCESS_KEY}
 
 ifneq ("$(wildcard $(env_file))","")
 	include $(env_file)
@@ -32,9 +29,13 @@ config:
 	@echo export KUBECONFIG=${KUBECONFIG}
 	@echo export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 	@echo export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+	@echo export S3_BUCKET=${S3_BUCKET}
+
+ec2:
+	aws ec2 describe-instances --output table
 
 init-all:
-	terragrunt run-all init
+	terragrunt run-all init -upgrade --terragrunt-source-update
 
 plan-all:
 	terragrunt run-all plan
@@ -48,8 +49,8 @@ destroy-all:
 terragrunt:
 	terragrunt $(RUN_ARGS)
 
-reset-all:
-	find . -name '.terraform.lock.hcl' | xargs rm
+reset-lock:
+	find . -name '.terraform.lock.hcl' -prune -exec rm -rf {} \;
 
-ec2:
-	aws ec2 describe-instances
+reset-cache:
+	find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;
