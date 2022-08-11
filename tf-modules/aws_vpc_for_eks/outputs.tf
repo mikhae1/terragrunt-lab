@@ -13,3 +13,7 @@ output "public_subnets" {
 output "vpc_endpoint_ses_dns_entry" {
   value = module.vpc.vpc_endpoint_ses_dns_entry
 }
+
+output "default_security_group_id" {
+  value = aws_default_security_group.default.id
+}
