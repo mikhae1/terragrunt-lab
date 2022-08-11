@@ -73,4 +73,20 @@ resource "aws_security_group_rule" "ses_endpoint_in" {
 #   depends_on                = [aws_vpc_peering_connection_accepter.peer]
 # }
 
-# TODO: Add Gateway Endpoint for S3
+resource "aws_default_security_group" "default" {
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
