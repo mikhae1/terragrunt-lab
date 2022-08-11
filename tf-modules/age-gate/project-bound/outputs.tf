@@ -7,6 +7,5 @@ output "rds_endpoint" {
 }
 
 output "rds_master_password" {
-  value     = random_password.rds_master_password.result
-  sensitive = true
+  value = random_password.rds_master_password.result
 }

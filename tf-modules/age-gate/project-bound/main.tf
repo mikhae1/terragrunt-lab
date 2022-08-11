@@ -42,7 +42,7 @@ module "rds-aurora" {
   publicly_accessible                 = true
   allowed_security_groups             = [var.cluster_security_group_id]
   allowed_cidr_blocks                 = var.allowed_cidr_blocks
-  password = random_password.rds_master_password.result
+  password                            = random_password.rds_master_password.result
   tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "dedicated"
   }
